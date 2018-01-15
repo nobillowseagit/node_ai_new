@@ -30,7 +30,8 @@ function start(route, handle) {
 	route(handle, pathname, request, response, postData);
   }
   //http.createServer(onRequest).listen(8888);//当你成功滴时候，你的数据在这里。
-  https.createServer(credentials, onRequest).listen(8888)
+  //https.createServer(credentials, onRequest).listen(8888)
+  http.createServer(onRequest).listen(8888)
   console.log("Server has started.");
 }
 

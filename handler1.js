@@ -21,7 +21,7 @@ var intResult = 0
 
 
 function get_data(req, res, data) {
-    console.log('get_data enter');
+    console.log('http get_data enter');
 
 	var query = url.parse(req.url, true).query;
 
