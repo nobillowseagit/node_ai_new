@@ -147,7 +147,7 @@ with detection_graph.as_default():
                 ###category_index_json = json.dumps(category_index);
             #print(category_index_json)
             #print('ret=' + category_index_json[max]['name'])
-    		
+            
                 ###json_dict = json.loads(category_index_json);
                 ###print('ret=' + json_dict[max]['name']);
                 ###str1 = arr[max];
@@ -157,109 +157,127 @@ with detection_graph.as_default():
                 print('ret='+max);
 
                 ###sock.send("kkkkkkk");
-				###emit('res_image', 'aaa');
+                ###emit('res_image', 'aaa');
 
             else:
                 print('ret=0');
                 ###sock.send("bbbbbbbbbb");
-    		
+            
             #vis_util.visualize_boxes_and_labels_on_image_array(
             #    image_np, np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores),
             #    category_index, use_normalized_coordinates=True, line_thickness=8)
             #plt.figure(figsize=IMAGE_SIZE)
             #plt.imshow(image_np)
         ###print("out of while");
-'''		
-		
+'''        
+        
 def function_new(my_path):
-	print("function_new enter");
-	with detection_graph.as_default():
-		#with tf.Session(graph=detection_graph, config=config) as sess:
-		with tf.Session(graph=detection_graph) as sess:
+    print("function_new enter");
+    with detection_graph.as_default():
+        #with tf.Session(graph=detection_graph, config=config) as sess:
+        with tf.Session(graph=detection_graph) as sess:
+                print(time.ctime())
+                
+                #print(PATH_TEST_IMAGE)
 
-			###while True:
-				###print("lijia while start");
-				###data = sock.recv(1024);
-				###print(data);
-				###time.sleep(1);
-				###if data=='exit' or not data:
-					###continue;
+                ###if True != os.path.exists(PATH_TEST_IMAGE):
+                ###    time.sleep(1);
+                ###    continue;
 
-				###start_time = time.time()
-
-				print(time.ctime())
-				
-				#print(PATH_TEST_IMAGE)
-
-				###if True != os.path.exists(PATH_TEST_IMAGE):
-				###    time.sleep(1);
-				###    continue;
-
-				#image = Image.open(PATH_TEST_IMAGE);
-				#image = Image.open("image2.jpg");
-				#print(image);
-				print(my_path);
-				image = Image.open(my_path);
+                #image = Image.open(PATH_TEST_IMAGE);
+                #image = Image.open("image2.jpg");
+                #print(image);
+                print(my_path);
+                image = Image.open(my_path);
 
 
-				image_np = np.array(image).astype(np.uint8)
-				image_np_expanded = np.expand_dims(image_np, axis=0)
-				image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-				boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-				scores = detection_graph.get_tensor_by_name('detection_scores:0')
-				classes = detection_graph.get_tensor_by_name('detection_classes:0')
-				num_detections = detection_graph.get_tensor_by_name('num_detections:0')
-				(boxes, scores, classes, num_detections) = sess.run(
-					[boxes, scores, classes, num_detections],
-					feed_dict={image_tensor: image_np_expanded})
-				#print('{} elapsed time: {:.3f}s'.format(time.ctime(), time.time() - start_time))
-				#print(np.squeeze(scores))
-				#print(np.squeeze(classes).astype(np.int32))
-				a = np.squeeze(classes).astype(np.int32)
-				print(a);
-				b = np.bincount(a);
-				print(b);
-				b[1] = 0;
-				max = np.argmax(b);
-				#print(max);
+                image_np = np.array(image).astype(np.uint8)
+                image_np_expanded = np.expand_dims(image_np, axis=0)
+                image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
+                boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
+                scores = detection_graph.get_tensor_by_name('detection_scores:0')
+                classes = detection_graph.get_tensor_by_name('detection_classes:0')
+                num_detections = detection_graph.get_tensor_by_name('num_detections:0')
+                (boxes, scores, classes, num_detections) = sess.run(
+                    [boxes, scores, classes, num_detections],
+                    feed_dict={image_tensor: image_np_expanded})
+                #print('{} elapsed time: {:.3f}s'.format(time.ctime(), time.time() - start_time))
+                print(np.squeeze(scores))
+                #print(np.squeeze(classes).astype(np.int32))
+                a = np.squeeze(classes).astype(np.int32)
+                print(a);
+                #a_max = a[0];
+                #print(a_max);
 
-				#os.remove(PATH_TEST_IMAGE);
+                for n in range(0, 100):
+                    if a[n] != 1:
+                        a_max = a[n];
+                        break;
+                print(a_max);
 
-				if max < 100:
-					max = max.astype("str");
-					max_string = max;
-				#print(np.squeeze(boxes))
-				#print(num_detections)
-				#print(category_index)
-				#print(category_index.1)
-				#if max < '100':
-					###category_index_json = json.dumps(category_index);
-				#print(category_index_json)
-				#print('ret=' + category_index_json[max]['name'])
-				
-					###json_dict = json.loads(category_index_json);
-					###print('ret=' + json_dict[max]['name']);
-					###str1 = arr[max];
-					###print(str1);
-					###res = 'ret=' + str1
-					###print(res.encode('utf-8'));
-					print('ret='+max);
+                b = np.bincount(a);
+                print(b);
+                b[1] = 0;
 
-					###sock.send("kkkkkkk");
-					###emit('res_image', 'aaa');
-					emit('image_send_res', max);
+                max_1 = np.argmax(b);
+                score_1 = a[max_1];
+                max = max_1;
+                score = score_1;
 
 
-				else:
-					print('ret=0');
-					###sock.send("bbbbbbbbbb");
-				
-				#vis_util.visualize_boxes_and_labels_on_image_array(
-				#    image_np, np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores),
-				#    category_index, use_normalized_coordinates=True, line_thickness=8)
-				#plt.figure(figsize=IMAGE_SIZE)
-				#plt.imshow(image_np)
-			###print("out of while");
+                b[max_1] = 0;
+                max_2 = np.argmax(b);
+                score_2 = a[max_2];
+                if score_2 > score:
+                    max = max_2; 
+
+                b[max_2] = 0;
+                max_3 = np.argmax(b);
+                score_3 = a[max_3];
+                if score_3 > score:
+                    max = max_3; 
+
+                #print(max);
+
+                max = a_max;
+
+                #os.remove(PATH_TEST_IMAGE);
+
+                if max < 100:
+                    max = max.astype("str");
+                    max_string = max;
+                #print(np.squeeze(boxes))
+                #print(num_detections)
+                #print(category_index)
+                #print(category_index.1)
+                #if max < '100':
+                    ###category_index_json = json.dumps(category_index);
+                #print(category_index_json)
+                #print('ret=' + category_index_json[max]['name'])
+                
+                    ###json_dict = json.loads(category_index_json);
+                    ###print('ret=' + json_dict[max]['name']);
+                    ###str1 = arr[max];
+                    ###print(str1);
+                    ###res = 'ret=' + str1
+                    ###print(res.encode('utf-8'));
+                    print('ret='+max);
+
+                    ###sock.send("kkkkkkk");
+                    ###emit('res_image', 'aaa');
+                    emit('image_send_res', max);
+
+
+                else:
+                    print('ret=0');
+                    ###sock.send("bbbbbbbbbb");
+                
+                #vis_util.visualize_boxes_and_labels_on_image_array(
+                #    image_np, np.squeeze(boxes), np.squeeze(classes).astype(np.int32), np.squeeze(scores),
+                #    category_index, use_normalized_coordinates=True, line_thickness=8)
+                #plt.figure(figsize=IMAGE_SIZE)
+                #plt.imshow(image_np)
+            ###print("out of while");
 
 
 #function_new('image1.jpg');
@@ -308,4 +326,4 @@ def test_message(message):
 
 if __name__ == '__main__':
     socketio.run(app)
-	
+    
