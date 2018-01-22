@@ -13,6 +13,8 @@ var index = require("./index");
 console.log('socket io client start');
 var io = require('socket.io-client');
 var socket = io.connect('http://127.0.0.1' + ':' + '5000' + '/image');
+var socket5010 = io.connect('http://127.0.0.1' + ':' + '5010' + '/image');
+
 
 var flag_image_res = 0;
 var image_res = 0;
@@ -46,7 +48,10 @@ function image_get_res(req, res, data) {
     console.log('https image_get_res enter');
 
 	//socket.emit('image_get_path', 'image1.jpg');
-	strResult = arr[image_res - 1];
+	
+    strResult = arr[image_res - 1];
+    //strResult = image_res;
+
     //console.log(arr[0]);
     //console.log(arr[1]);
     console.log(strResult);
@@ -112,7 +117,9 @@ function upload(req, res, data) {
 		*/
 		
 		flag_image_res = 0;
+
 		socket.emit('image_set_path', 'image1.jpg');		
+        //socket5010.emit('image_set_path', 'image1.jpg');        
 
     	res.writeHead(200, {
         	'Content-Type': 'text/plain'
@@ -217,3 +224,39 @@ socket.on('res', function(data){
 
 
 
+
+
+
+socket5010.on('connect', function(){
+    console.log('socket5010 connect');
+    });
+
+
+socket5010.on('event', function(data){});
+
+socket5010.on('disconnect', function(){});
+
+//socket.emit('set_image', 'image1.jpg');
+
+socket5010.on('my response', function(data){
+    //console.log('ccc')
+});
+
+socket5010.on('image_send_res', function(data){
+    console.log('socket5010 image_send_res enter');
+    console.log(data);
+    flag_image_res = 1;
+    image_res = data;
+});
+
+socket5010.on('image_res', function(data){
+    console.log('socket5010 image_res enter');
+    console.log(data);
+    flag_image_res = 1;
+    image_res = data;
+});
+
+socket5010.on('res', function(data){
+    console.log('socket5010 res enter');
+    console.log(data);
+});
