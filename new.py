@@ -62,6 +62,8 @@ print('program start');
 #PATH_TEST_IMAGE = sys.argv[1]
 PATH_TO_CKPT = 'D:\\tensorflow\\ssd_mobilenet_v1_coco_11_06_2017\\frozen_inference_graph.pb'
 PATH_TO_LABELS = 'D:\\tensorflow\\models\\research\\object_detection\\data\\mscoco_label_map.pbtxt'
+#PATH_TO_LABELS = 'D:\\tensorflow\\ssd_mobilenet_v1_coco_11_06_2017\\graph.pbtxt'
+
 NUM_CLASSES = 100
 IMAGE_SIZE = (18, 12)
 
@@ -188,8 +190,13 @@ def function_new(my_path):
                 #image = Image.open("image2.jpg");
                 #print(image);
                 print(my_path);
-                image = Image.open(my_path);
-
+                
+                #image = Image.open(my_path);
+                
+                raw_image = Image.open(my_path);
+                box = (600, 500, 2500, 2000)
+                image = raw_image.crop(box)
+                image.save('D:/node/node_ai_new/reshape.jpg')
 
                 image_np = np.array(image).astype(np.uint8)
                 image_np_expanded = np.expand_dims(image_np, axis=0)
