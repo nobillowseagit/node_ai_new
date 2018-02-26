@@ -19,6 +19,10 @@ from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 
 
+import train1
+import test1
+
+
 max_string = 0
 max_val = 0
 
@@ -331,6 +335,25 @@ def test_message(message):
     print(max_string);
     emit('image_res', max_string)
 
+
+
+@socketio.on('train_image', namespace='/train')
+def test_message(message):
+    print('socketio train_image enter')
+    print(message)
+    train1.run_training();
+    emit('res', 'ok');
+
+@socketio.on('train_test', namespace='/train')
+def test_message(message):
+    print('socketio train_test enter')
+    print(message)
+    index = test1.evaluate_one_image('D:/tensorflow/mydata/cat_dog2/cat.0.jpg')
+    print(index)
+    emit('res', 'ok');
+
+
+
 if __name__ == '__main__':
-    socketio.run(app)
+    socketio.run(app, port=9000)
     
