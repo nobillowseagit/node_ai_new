@@ -182,7 +182,7 @@ function upload(req, res, data) {
 
 
 function cla_train(req, res, data) {
-    console.log('http cla_image enter');
+    console.log('http cla_train enter');
 
     var query = url.parse(req.url, true).query;
 
@@ -192,7 +192,7 @@ function cla_train(req, res, data) {
     g_cla_name = cla_name;
 
 
-    strCmd = 'python pinyin.py ' + cla_name;
+    strCmd = 'python get_pinyin.py ' + cla_name;
     strRet = execSync(strCmd).toString();
 
     jsonRet = JSON.parse(strRet);

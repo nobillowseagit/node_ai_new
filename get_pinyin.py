@@ -5,18 +5,18 @@ import json # import the module of json
 import sys # this module is used to get the params from cmd
 
 
-#import pinyin
-from pypinyin import pinyin, lazy_pinyin
-import pypinyin
+import pinyin as pinyin
+
 
 
 params = sys.argv[1]
 #obj = json.loads(params) #str to obj
-print(params)
+#print(params)
 #ret = my_bot.get_response(params)
 
 ret = pinyin.get(params, format="numerical")
-print(ret)
+#ret = pinyin.delimiter.join(_pinyin_generator(u(params), format="numerical"))
+#print(ret)
 
 
 
