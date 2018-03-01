@@ -4,10 +4,20 @@ import shutil
 from flask import Flask, render_template
 from flask_socketio import SocketIO, emit
 
-import test1
+import pinyin
+from pinyin._compat import u
+
+import train1
 
 image_base_dir = 'd:/tensorflow/mydata/cat_dog2/'
 source_file_full_name = 'd:/node/node_ai_new/image1.jpg'
+
+
+
+
+
+arrObj = [('wei4zhi1', '未知', 0), ('shou3ji1', '手机', 1), ('ming2pian4', '名片', 2)];
+
 
 
 def get_file_index(file_dir, cla_name):
@@ -49,7 +59,7 @@ print(file_full_name)
 
 
 
-print('init train test server');
+print('init train_test server');
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
@@ -72,23 +82,29 @@ def test_message(message):
 
 
 
-@socketio.on('cla_image', namespace='/image')
+@socketio.on('cla_train', namespace='/image')
 def test_message(message):
     print('socketio cla_image enter')
     print(message)
 
+    #cla_pinyin = pinyin.get(message, format="numerical")
+    #print(cla_pinyin)
 
-    cla_pinyin = pinyin.get(message, format="numerical")
-    print(cla_pinyin)
+    #index = get_file_index(image_base_dir, cla_pinyin)
+    #print(index)
 
-    index = get_file_index(image_base_dir, cla_pinyin)
+    cla_pinyin = message;
+
+    index = get_file_index(image_base_dir, message)
     print(index)
 
     file_full_name = insert_pic(image_base_dir, cla_pinyin, index)
     print(file_full_name)
 
 
-    emit('res', 'ok');
+    train1.run_training();
+
+    #emit('cla_pinyin_res', cla_pinyin);
 
 
 

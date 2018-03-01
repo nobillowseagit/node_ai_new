@@ -12,11 +12,56 @@ var index = require("./index");
 //socket io client
 console.log('socket io client start');
 var io = require('socket.io-client');
-var socket = io.connect('http://127.0.0.1' + ':' + '5000' + '/image');
+//var socket = io.connect('http://127.0.0.1' + ':' + '5000' + '/image');
+var socket = io.connect('http://127.0.0.1' + ':' + '9000' + '/image');
+
+var socket_cla_test = io.connect('http://127.0.0.1' + ':' + '9001' + '/image');
+var socket_cla_op = io.connect('http://127.0.0.1' + ':' + '9002' + '/image');
+
+
 
 var flag_image_res = 0;
 var image_res = 0;
-var intResult = 0
+var intResult = 0;
+
+
+var flag_cla_test_res = 0;
+var cla_test_res = -1;
+
+
+var g_flag = 0;
+
+var g_cla_name = '未知';
+arrObj = ["错误","未知","手机","名片"];
+
+
+
+var arrObj1 = [
+{
+    cla_id: 0,
+    cla_name: "错误",
+    cla_pinyin: "cuo4wu4",
+    cla_map: "a",
+},
+{
+    cla_id: 1,
+    cla_name: "未知",
+    cla_pinyin: "wei4zhi1",
+    cla_map: "a",
+},
+{
+    cla_id: 2,
+    cla_name: "未知",
+    cla_pinyin: "wei4zhi1",
+    cla_map: "cat",
+},
+{
+    cla_id: 3,
+    cla_name: "未知",
+    cla_pinyin: "wei4zhi1",
+    cla_map: "dog",
+}
+];
 
 
 
@@ -41,6 +86,9 @@ function get_data(req, res, data) {
     res.write(answer);
     res.end();
 }
+
+
+
 
 function image_get_res(req, res, data) {
     console.log('https image_get_res enter');
@@ -131,6 +179,148 @@ function upload(req, res, data) {
 }
 
 
+
+
+function cla_train(req, res, data) {
+    console.log('http cla_image enter');
+
+    var query = url.parse(req.url, true).query;
+
+    var cla_name = query.cla_name;
+    console.log(cla_name);
+
+    g_cla_name = cla_name;
+
+
+    strCmd = 'python pinyin.py ' + cla_name;
+    strRet = execSync(strCmd).toString();
+
+    jsonRet = JSON.parse(strRet);
+    cla_pinyin = jsonRet.ret;
+    console.log(cla_pinyin);
+
+
+
+    if (g_flag == 0) {
+        g_flag = 1;
+        name = 'cat';
+    } else {
+        g_flag = 0;
+        name = 'dog';
+    }
+    arrObj[g_flag + 2] = cla_name;
+
+
+
+    socket_cla_op.emit('cla_train', name);
+
+    res.writeHead(200, {
+        'Content-Type': 'text/plain'
+    });
+    res.write('ok');
+    res.end();
+}
+
+function cla_image(req, res, data) {
+    console.log('http cla_image enter');
+    
+    //send message to python server
+    /*
+    socket.emit('set_image', 'image1.jpg');
+
+    flag_image_res = 0;
+    res.writeHead(200, {
+        'Content-Type': 'text/plain'
+    });
+    res.write('ok');
+    res.end();
+    */
+
+
+    var form = new formidable.IncomingForm();
+    form.uploadDir = __dirname;
+    form.encoding = 'utf-8';  
+    form.keepExtensions = true;
+    form.maxFilesSize = 8 * 1024 * 1024;
+
+    form.on('field', function(name, val){  
+        console.log('field enter');
+    });  
+  
+    form.on('file', function(name, file){  
+        console.log('file enter');
+        console.log(file.path);
+        console.log(file.name);
+        fs.renameSync(file.path, 'image1.jpg');
+
+        /*
+        strCmd = 'python aaa.py image1.jpg';
+        strRet = execSync(strCmd).toString();
+        strRet = strRet.replace(/[\r\n]/g,"");        
+
+        index = strRet.indexOf('ret=');
+        intResult = strRet.slice(index + 4);
+        console.log(intResult);
+        strResult = arr[intResult];
+        console.log(strResult);
+        */
+        
+        flag_image_res = 0;
+        //socket.emit('image_set_path', 'image1.jpg');        
+        socket_cla_test.emit('cla_test', 'image1.jpg');        
+
+        res.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
+        res.write('ok');
+        res.end();
+    });  
+    
+    form.on('end', function() {  
+        console.log('end enter');
+    });    
+
+    form.parse(req, function(error, fields, files) {
+        console.log('parsing enter');
+    });
+}
+
+function cla_image_res(req, res, data) {
+    console.log('https cla_image_res enter');
+
+    socket_cla_test.emit('req_cla_test_res', 'aaa');
+    index = parseInt(cla_test_res);
+    index = index + 1;
+    console.log(index);
+    strResult = arrObj[index];
+    //strResult = cla_test_res;
+    //console.log(arr[0]);
+    //console.log(arr[1]);
+    console.log(strResult);
+    
+    if (flag_cla_test_res == 1) {
+        flag_cla_test_res = 0;
+        res.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
+        if (cla_test_res != -1) {
+            res.write(strResult);
+            res.end();
+        } else {
+            res.write('0');
+            res.end();
+        }
+
+    } else {
+        res.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
+        res.write('0');
+        res.end();      
+    }   
+}
+
+
 function test(req, res, data) {
     console.log('test enter');
 
@@ -149,6 +339,9 @@ function test(req, res, data) {
 
 	
 exports.get_data = get_data;
+exports.cla_image = cla_image;
+exports.cla_image_res = cla_image_res;
+exports.cla_train = cla_train;
 exports.upload = upload;
 exports.image_get_res = image_get_res;
 exports.test = test;
@@ -176,6 +369,10 @@ function image(req, res, data) {
 }
 
 exports.image = image;
+
+
+
+
 
 
 
@@ -214,6 +411,45 @@ socket.on('res', function(data){
     console.log('socketio res enter');
     console.log(data);
 });
+
+
+
+
+
+
+socket_cla_test.on('connect', function(){
+    console.log('socket_cla_test connect enter');
+    });
+
+socket_cla_test.on('res', function(data){
+    console.log('socket_cla_test res enter');
+    console.log(data);
+});
+
+socket_cla_test.on('cla_test_res', function(data){
+    console.log('socket_cla_test cla_test_res enter');
+    console.log(data);
+    flag_cla_test_res = 1;
+    cla_test_res = data;
+});
+
+
+
+
+socket_cla_op.on('connect', function(){
+    console.log('socket_cla_op connect enter');
+    });
+
+socket_cla_op.on('cla_pinyin_res', function(data){
+    console.log('socket_cla_op cla_pinyin_res enter');
+    console.log(data);
+
+    cla_pinyin = data;
+
+
+});
+
+
 
 
 

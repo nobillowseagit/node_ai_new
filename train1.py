@@ -89,38 +89,38 @@ def run_training():
     summary_op = tf.summary.merge_all()
     print(summary_op)
 
-    sess = tf.Session()  
-    train_writer = tf.summary.FileWriter(logs_train_dir, sess.graph)  
-    saver = tf.train.Saver()  
-      
-    sess.run(tf.global_variables_initializer())  
-    coord = tf.train.Coordinator()  
-    threads = tf.train.start_queue_runners(sess=sess, coord=coord)  
-      
-    try:  
-        for step in np.arange(MAX_STEP):
-            print(step)
-            
-            if coord.should_stop():  
-                    break  
-            _, tra_loss, tra_acc = sess.run([train_op, train_loss, train__acc])  
-                 
-            if step % cnt_summary == 0:  
-                print('Step %d, train loss = %.2f, train accuracy = %.2f%%' %(step, tra_loss, tra_acc*100.0))  
-                summary_str = sess.run(summary_op)  
-                train_writer.add_summary(summary_str, step)  
-              
-            if step % cnt_cache == 0 or (step + 1) == MAX_STEP:  
-                checkpoint_path = os.path.join(logs_train_dir, 'model.ckpt')  
-                saver.save(sess, checkpoint_path, global_step=step)  
-                  
-    except tf.errors.OutOfRangeError:  
-        print('Done training -- epoch limit reached')  
-    finally:  
-        coord.request_stop()  
+    with tf.Session() as sess:
+        train_writer = tf.summary.FileWriter(logs_train_dir, sess.graph)  
+        saver = tf.train.Saver()  
           
-    coord.join(threads)  
-    sess.close()  
+        sess.run(tf.global_variables_initializer())  
+        coord = tf.train.Coordinator()  
+        threads = tf.train.start_queue_runners(sess=sess, coord=coord)  
+          
+        try:  
+            for step in np.arange(MAX_STEP):
+                print(step)
+                
+                if coord.should_stop():  
+                        break  
+                _, tra_loss, tra_acc = sess.run([train_op, train_loss, train__acc])  
+                     
+                if step % cnt_summary == 0:  
+                    print('Step %d, train loss = %.2f, train accuracy = %.2f%%' %(step, tra_loss, tra_acc*100.0))  
+                    summary_str = sess.run(summary_op)  
+                    train_writer.add_summary(summary_str, step)  
+                  
+                if step % cnt_cache == 0 or (step + 1) == MAX_STEP:  
+                    checkpoint_path = os.path.join(logs_train_dir, 'model.ckpt')  
+                    saver.save(sess, checkpoint_path, global_step=step)  
+                      
+        except tf.errors.OutOfRangeError:  
+            print('Done training -- epoch limit reached')  
+        finally:  
+            coord.request_stop()  
+              
+        coord.join(threads)  
+        sess.close()  
       
   
   

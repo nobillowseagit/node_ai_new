@@ -22,10 +22,17 @@ var handler = require("./handler1");
 var handle = {};
 
 handle["/get_data"] = handler.get_data;
+
 handle["/upload"] = handler.upload;
 handle["/test"] = handler.test;
+
 handle["/image"] = handler.image;
 handle["/image_get_res"] = handler.image_get_res;
+
+handle["/cla_image"] = handler.cla_image;
+handle["/cla_image_res"] = handler.cla_image_res;
+
+handle["/cla_train"] = handler.cla_train;
 
 
 server.start(router.route, handle);

@@ -9,19 +9,7 @@ from chatterbot.trainers import ListTrainer
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer 
  
-my_bot = ChatBot(
-    "Training demo",
-    logic_adapters=[
-        {
-            'import_path': 'chatterbot.logic.BestMatch'
-        },
-        {
-            'import_path': 'chatterbot.logic.LowConfidenceAdapter',
-            'threshold': 0.65,
-            'default_response': '$d:通用.$c:复位.$a:我还不知道这个问题，说点别的吧.'
-        }
-    ]
-)
+my_bot = ChatBot("Training demo")
 
 #my_bot.set_trainer(ChatterBotCorpusTrainer)
 #my_bot.train("chatterbot.corpus.chinese")
@@ -140,60 +128,6 @@ my_list = [
 
     "$d:通用.$s:已注册;女性;年龄;.$q:看看这是什么.",
     "$d:识别.$a:准备识别.",
-
-
-
-########
-    "$d:通用.$s:未注册;男性;年龄;.$q:教你认识物品.",
-    "$d:训练.$a:让我看看这是.",
-
-    "$d:通用.$s:已注册;男性;年龄;.$q:教你认识物品.",
-    "$d:训练.$a:让我看看这是.",
-
-    "$d:通用.$s:未注册;女性;年龄;.$q:教你认识物品.",
-    "$d:训练.$a:让我看看这是.",
-
-    "$d:通用.$s:已注册;女性;年龄;.$q:教你认识物品.",
-    "$d:训练.$a:让我看看这是.",
-
-
-    "$d:训练.$s:未注册;男性;年龄;.$q:说对了.",
-    "$d:训练.$a:我好聪明吧.",
-
-    "$d:训练.$s:已注册;男性;年龄;.$q:说对了.",
-    "$d:训练.$a:我好聪明吧.",
-
-    "$d:训练.$s:未注册;女性;年龄;.$q:说对了.",
-    "$d:训练.$a:我好聪明吧.",
-
-    "$d:训练.$s:已注册;女性;年龄;.$q:说对了.",
-    "$d:训练.$a:我好聪明吧.",
-
-#
-    "$d:训练.$s:未注册;男性;年龄;.$q:说错了.",
-    "$d:训练.$a:告诉我这是什么呀.",
-
-    "$d:训练.$s:已注册;男性;年龄;.$q:说错了.",
-    "$d:训练.$a:告诉我这是什么呀.",
-
-    "$d:训练.$s:未注册;女性;年龄;.$q:说错了.",
-    "$d:训练.$a:告诉我这是什么呀.",
-
-    "$d:训练.$s:已注册;女性;年龄;.$q:说错了.",
-    "$d:训练.$a:告诉我这是什么呀.",
-
-#
-    "$d:训练.$s:未注册;男性;年龄;.$q:这是.",
-    "$d:训练.$a:谢谢，我知道啦.",
-
-    "$d:训练.$s:已注册;男性;年龄;.$q:这是.",
-    "$d:训练.$a:谢谢，我知道啦.",
-
-    "$d:训练.$s:未注册;女性;年龄;.$q:这是.",
-    "$d:训练.$a:谢谢，我知道啦.",
-
-    "$d:训练.$s:已注册;女性;年龄;.$q:这是.",
-    "$d:训练.$a:谢谢，我知道啦.",
 
 
 

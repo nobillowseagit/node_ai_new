@@ -54,7 +54,7 @@ MAX_STEP = 6 # with current parameters, it is suggested to use MAX_STEP>10k
 learning_rate = 0.0001 # with current parameters, it is suggested to use learning rate<0.0001  
   
   
-  
+res_index = -1  
   
 #%%  
 def run_training():  
@@ -206,16 +206,33 @@ def evaluate_one_image(img_dir):
               
             prediction = sess.run(logit, feed_dict={x: image_array})
             print(prediction)
-              
-            max_index = np.argmax(prediction)  
+
+            max_index = np.argmax(prediction)
+            print(prediction[:, max_index])
+
             if max_index==0:  
                 print('This is a cat with possibility %.6f' %prediction[:, 0])  
             else:  
                 print('This is a dog with possibility %.6f' %prediction[:, 1])
 
+
+            if prediction[:, max_index] < 0.85:
+                max_index = 0
+            else:
+                max_index = max_index + 1
+
+            res_index = max_index
+
             return max_index  
   
 #%%  
+
+
+
+def get_res():
+    return res_index  
+
+
 
 #run_training()
 ##evaluate_one_image()

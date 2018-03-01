@@ -9,7 +9,19 @@ from chatterbot.trainers import ListTrainer
 from chatterbot import ChatBot
 from chatterbot.trainers import ChatterBotCorpusTrainer 
  
-my_bot = ChatBot("Training demo")
+my_bot = ChatBot(
+    "Training demo",
+    logic_adapters=[
+        {
+            'import_path': 'chatterbot.logic.BestMatch'
+        },
+        {
+            'import_path': 'chatterbot.logic.LowConfidenceAdapter',
+            'threshold': 0.65,
+            'default_response': '$d:通用.$c:复位.$a:我还不知道这个问题，说点别的吧.'
+        }
+    ]
+)
 
 #my_bot.set_trainer(ChatterBotCorpusTrainer)
 #my_bot.train("chatterbot.corpus.chinese")
