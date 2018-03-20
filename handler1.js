@@ -201,6 +201,7 @@ function cla_train(req, res, data) {
 
 
 
+    
     if (g_flag == 0) {
         g_flag = 1;
         name = 'cat';
@@ -289,13 +290,21 @@ function cla_image_res(req, res, data) {
     console.log('https cla_image_res enter');
 
     socket_cla_test.emit('req_cla_test_res', 'aaa');
+
+    console.log("cla_test_res = ");
+    console.log(cla_test_res);
+
     index = parseInt(cla_test_res);
     index = index + 1;
+
+    console.log("index = "); 
     console.log(index);
+
     strResult = arrObj[index];
     //strResult = cla_test_res;
     //console.log(arr[0]);
     //console.log(arr[1]);
+    console.log("strResult = "); 
     console.log(strResult);
     
     if (flag_cla_test_res == 1) {
