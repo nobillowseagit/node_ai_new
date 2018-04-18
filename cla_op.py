@@ -7,6 +7,8 @@ from flask_socketio import SocketIO, emit
 import pinyin
 from pinyin._compat import u
 
+import subprocess
+
 import train1
 
 image_base_dir = 'd:/tensorflow/mydata/cat_dog2/'
@@ -102,7 +104,8 @@ def test_message(message):
     print(file_full_name)
 
 
-    train1.run_training();
+    #train1.run_training();
+    subprocess.call("python train2.py", shell=True)
 
     #emit('cla_pinyin_res', cla_pinyin);
 

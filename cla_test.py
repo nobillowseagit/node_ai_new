@@ -26,7 +26,8 @@ def test_message(message):
     index = test1.evaluate_one_image(source_file_full_name)
     print(index)
 
-    emit('res', 'ok');
+#    emit('res', 'ok');
+    emit('cla_test_res', str(index));
 
 @socketio.on('req_cla_test_res', namespace='/image')
 def test_message(message):

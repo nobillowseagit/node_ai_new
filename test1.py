@@ -216,7 +216,7 @@ def evaluate_one_image(img_dir):
                 print('This is a dog with possibility %.6f' %prediction[:, 1])
 
 
-            if prediction[:, max_index] < 0.85:
+            if prediction[:, max_index] < 0.75:
                 max_index = 1
             else:
                 max_index = max_index + 2

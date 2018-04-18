@@ -32,7 +32,7 @@ var cla_test_res = -1;
 var g_flag = 0;
 
 var g_cla_name = '未知';
-arrObj = ["错误","未知","手机","空"];
+arrObj = ["错误","未知","空","空"];
 
 
 
@@ -202,19 +202,16 @@ function cla_train(req, res, data) {
 
     if (cla_name == arrObj[2]) {
         name = 'cat';
-        g_flag = 0;
-    } else if (cla_pinyin == arrObj[3]) {
+    } else if (cla_name == arrObj[3]) {
         name = 'dog';
-        g_flag = 1;
     } else {
-        if (g_flag == 0) {
-            g_flag = 1;
+        if ('空' == arrObj[2]) {
+            arrObj[2] = cla_name;
             name = 'cat';
         } else {
-            g_flag = 0;
+            arrObj[3] = cla_name;
             name = 'dog';
         }        
-        arrObj[g_flag + 2] = cla_name;
     }
     
     // if (g_flag == 0) {
@@ -305,27 +302,28 @@ function cla_image(req, res, data) {
 function cla_image_res(req, res, data) {
     console.log('https cla_image_res enter');
 
-    socket_cla_test.emit('req_cla_test_res', 'aaa');
+    // socket_cla_test.emit('req_cla_test_res', 'aaa');
 
-    console.log("cla_test_res = ");
-    console.log(cla_test_res);
+    if (flag_cla_test_res == 1) {
+        flag_cla_test_res = 0;
 
-    index = parseInt(cla_test_res);
-    // index = index + 1;
+        console.log("cla_test_res = ");
+        console.log(cla_test_res);
 
-    console.log("index = "); 
-    console.log(index);
+        index = parseInt(cla_test_res);
+        // index = index + 1;
 
-    strResult = arrObj[index];
-    //strResult = cla_test_res;
-    //console.log(arr[0]);
-    //console.log(arr[1]);
-    console.log("strResult = "); 
-    console.log(strResult);
-    
-    if (index != 0) {
-        if (flag_cla_test_res == 1) {
-            flag_cla_test_res = 0;
+        console.log("index = "); 
+        console.log(index);
+
+        strResult = arrObj[index];
+        //strResult = cla_test_res;
+        //console.log(arr[0]);
+        //console.log(arr[1]);
+        console.log("strResult = "); 
+        console.log(strResult);
+        
+        if (index != 0) {
             res.writeHead(200, {
                 'Content-Type': 'text/plain'
             });
@@ -336,14 +334,13 @@ function cla_image_res(req, res, data) {
                 res.write('0');
                 res.end();
             }
-
-        } else {
-            res.writeHead(200, {
-                'Content-Type': 'text/plain'
-            });
-            res.write('0');
-            res.end();      
         }
+    } else {
+        res.writeHead(200, {
+            'Content-Type': 'text/plain'
+        });
+        res.write('0');
+        res.end(); 
     }   
 }
 

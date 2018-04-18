@@ -51,13 +51,12 @@ IMG_H = 208
 BATCH_SIZE = 2  
 #CAPACITY = 2000  
 CAPACITY = 256  
-MAX_STEP = 100 # with current parameters, it is suggested to use MAX_STEP>10k  
+MAX_STEP = 50 # with current parameters, it is suggested to use MAX_STEP>10k  
 learning_rate = 0.0001 # with current parameters, it is suggested to use learning rate<0.0001
 
 cnt_summary = 10
-cnt_cache = 100
-  
-  
+cnt_cache = 50
+
   
   
 #%%  
@@ -116,11 +115,13 @@ def run_training():
                       
         except tf.errors.OutOfRangeError:  
             print('Done training -- epoch limit reached')  
-        finally:  
+        finally:
+            print('train end')  
             coord.request_stop()  
               
         coord.join(threads)  
-        sess.close()  
+        sess.close()
+        print('train exit')  
       
   
   
