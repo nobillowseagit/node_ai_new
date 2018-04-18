@@ -32,7 +32,7 @@ var cla_test_res = -1;
 var g_flag = 0;
 
 var g_cla_name = '未知';
-arrObj = ["错误","未知","手机","名片"];
+arrObj = ["错误","未知","手机","空"];
 
 
 
@@ -200,16 +200,32 @@ function cla_train(req, res, data) {
     console.log(cla_pinyin);
 
 
-
-    
-    if (g_flag == 0) {
-        g_flag = 1;
+    if (cla_name == arrObj[2]) {
         name = 'cat';
-    } else {
         g_flag = 0;
+    } else if (cla_pinyin == arrObj[3]) {
         name = 'dog';
+        g_flag = 1;
+    } else {
+        if (g_flag == 0) {
+            g_flag = 1;
+            name = 'cat';
+        } else {
+            g_flag = 0;
+            name = 'dog';
+        }        
+        arrObj[g_flag + 2] = cla_name;
     }
-    arrObj[g_flag + 2] = cla_name;
+    
+    // if (g_flag == 0) {
+    //     g_flag = 1;
+    //     name = 'cat';
+    // } else {
+    //     g_flag = 0;
+    //     name = 'dog';
+    // }
+
+    // arrObj[g_flag + 2] = cla_name;
 
 
 
@@ -295,7 +311,7 @@ function cla_image_res(req, res, data) {
     console.log(cla_test_res);
 
     index = parseInt(cla_test_res);
-    index = index + 1;
+    // index = index + 1;
 
     console.log("index = "); 
     console.log(index);
@@ -307,25 +323,27 @@ function cla_image_res(req, res, data) {
     console.log("strResult = "); 
     console.log(strResult);
     
-    if (flag_cla_test_res == 1) {
-        flag_cla_test_res = 0;
-        res.writeHead(200, {
-            'Content-Type': 'text/plain'
-        });
-        if (cla_test_res != -1) {
-            res.write(strResult);
-            res.end();
-        } else {
-            res.write('0');
-            res.end();
-        }
+    if (index != 0) {
+        if (flag_cla_test_res == 1) {
+            flag_cla_test_res = 0;
+            res.writeHead(200, {
+                'Content-Type': 'text/plain'
+            });
+            if (cla_test_res != -1) {
+                res.write(strResult);
+                res.end();
+            } else {
+                res.write('0');
+                res.end();
+            }
 
-    } else {
-        res.writeHead(200, {
-            'Content-Type': 'text/plain'
-        });
-        res.write('0');
-        res.end();      
+        } else {
+            res.writeHead(200, {
+                'Content-Type': 'text/plain'
+            });
+            res.write('0');
+            res.end();      
+        }
     }   
 }
 

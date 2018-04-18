@@ -217,9 +217,9 @@ def evaluate_one_image(img_dir):
 
 
             if prediction[:, max_index] < 0.85:
-                max_index = 0
+                max_index = 1
             else:
-                max_index = max_index + 1
+                max_index = max_index + 2
 
             res_index = max_index
 

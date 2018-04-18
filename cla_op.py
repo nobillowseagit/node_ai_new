@@ -59,7 +59,7 @@ print(file_full_name)
 
 
 
-print('init train_test server');
+print('init train_op server');
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
 socketio = SocketIO(app)
